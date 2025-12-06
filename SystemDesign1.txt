@@ -1,0 +1,56 @@
+SYSTEM DESIGN :-
+Whenever we want to build a system or platform which can perform multiple tasking, and other services at a time and also available to all users at the same time without getting down, secures users data and trustable service provider, that's only possible with the help of system design concept because it gives a robustness, data security, zero down time.
+
+DNS SERVER :-
+It's nothing, it's just like the telephone book, it just gives which IP address has which IP name so whenever we are typing a name into search box, it's just hitting the IP address which is related to their name.
+
+For example you can understand like it stores all data like key and value pair.
+
+DNS BEHAVIOUR :-
+When you search then the request goes to first DNS server, after that it will collect the IP address from DNS server, get back to user and then from client side browser it's hitting the server or machine which we search. This complete process is called DNS resolution.
+
+
+RATE LIMITING :- 
+Basically where you are adding the logic of how many users can give a request to one API at one second or minute or hour to prevent the fake request and prevent from DDoS attack.
+
+SYSTEM DOWN OR FAILURE :-
+Whenever we use all the physical resources of any system, that gives us the system error, system down, system failure.
+
+VERTICAL SCALING :-
+Whenever we increase the physical resources of our system for best cases but in reality we are using the 30-40% of that storage or resources, so it's kind of wastage of resources and we need to avoid this. So vertical scaling means just increase the resources for best case, not optimizing.
+
+Cons of vertical Scaling :- We can't add more physical resources while system is in running state so we need to restart the system when we are adding the physical resources in vertical scaling and that time when the computer restarts, that's called down time. No service provider can take this down time of system, especially during any sales or events.
+
+HORIZONTAL SCALING :-
+Instead of increasing the physical resource of any system, we just add one more replicate of server so before starting the next server my last server is handling all the requests before the new server is ready. So the advantage of this scaling is we are facing the 0 down time and instead of securing the system for best case we make it ideal so whenever the load or request will increase it will spin up the new server and make it robust.
+
+LOAD BALANCER :-
+This is distributing your request into the server so the workflow of this like we register the load balancer IP into DNS server so whenever user searches it will hit the load balancer first then load balancer distributing the request into the multiple server like the logic of horizontal scaling. Inside the load balancer we are adding the many algorithms for distributing the request into the server. Most common and frequent approach is round-robin approach.
+
+API GATEWAY :-
+So basically this is the route routing thing. We have the multiple services in our platform like auth, api, orders, payments and we created an ideal server for all services and we want if the user wants auth service so we redirect him to auth service, if he wants to make payment go to use the payment service, if he wants to fetch the order details so go to orders api. API gateway just does the routing of request. For better approach and robust system we implement the cluster in every service so the API gateway hits the load balancer and load balancer distributes the request into servers.
+
+
+
+BATCH PROCESSING :- 
+Basically when we are dependent on 3rd party service for anything, that is basically batch processing. The workflow is suppose we have one payment service in our platform and after every payment we send an invoice to user on their mail, so here we use this batch processing service. So between our payment service and Gmail API we implemented here an email worker service, so it will give the data to Gmail and invoice to Gmail and Gmail will send it to user. For robustness and less data lacking we use the queue system or SQS service between payment and email worker so we will push all the payments and details into queue and email worker will get it from queue using push and pull mechanism and send it to Gmail service.
+
+
+Cons of this logic :- Suppose if we want to trigger multiple services when user makes the payment so the queue system is not enough to trigger the multiple service at a time, so we use the pub sub event driven architecture so it will publish the notification and multiple services will receive it at the same time.
+
+Advantage of queue system is we are getting the acknowledgment but not in pub sub logic.
+
+
+
+FANOUT ARCHITECTURE :- 
+So it's a combination of pub sub and queue mechanism so first we implement the pub sub model to publish the notification for all services. After pub sub we implemented the queue mechanism so it gets the notification from pub sub and sends it to server properly or external API and because we are using the queue mechanism we have the retry or acknowledgment functionality also available.
+
+
+SCALEOUT DATABASE :-
+To prevent our data with overwhelmed request we can create a replicate of DB so the read, write operation will trigger the main node DB and for analytics, log you will request to read replica of DB.
+
+
+You can also implement the Redis for caching management so here the most frequent and cached data is available there so you will be reducing the request of main DB. So whenever the user requests something first it will check into Redis cache, if available then return it from there otherwise request to our node DB.
+
+
+Use the CloudFront so it will basically deploy the small small machine into every region so it will reduce the latency and the network bandwidth of request so data will be easily available.
